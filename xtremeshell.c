@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdlib.h>
 
 #define MAX_INPUT_LENGTH 100
 #define MAX_ARGS 10
@@ -14,12 +15,13 @@ int main(int argc, char *argv[])
    char *args[MAX_ARGS];
    
    while (1) {
-       printf("&xtremeshell&-> ");
+       printf("&xtremeshell& -> ");
        fgets(input, sizeof(input), stdin);
        input[strcspn(input, "\n")] = '\0'; 
        
        if (strcmp(input, "xtremeshell") == 0) {
            execute_commands(args);
+           continue;
        }
        
        int argcount = 0;
@@ -34,16 +36,39 @@ int main(int argc, char *argv[])
    }
 }
 
-
 static inline int execute_commands(char* args[]) {
-    pid_t pid = fork();
+    if (args[0] == NULL) {
+        return 0;
+    }
     
+    if (strcmp(args[0], "cd") == 0) {
+        if (chdir(args[1]) != 0) {
+            perror("chdir");
+            return -1;
+        }
+        return 0;
+    }
+    
+    pid_t pid = fork();
+
     if (pid == -1) {
         perror("fork");
         return -1;
     } else if (pid == 0) {
+        if (args[0][0] == '\0') {
+            char* command = (char*)malloc(strlen(args[0]) + 2);
+            if (command == NULL) {
+                perror("malloc");
+                return -1;
+            }
+            sprintf(command, "/%s", args[0]);
+            execl("/bin/sh", "sh", "-c", command, NULL);
+            perror("execl");
+            free(command);
+            return 1;
+        }
         execvp(args[0], args);
-        perror("execpv");
+        perror("execvp");
         return 1;
     }
     return 0;
