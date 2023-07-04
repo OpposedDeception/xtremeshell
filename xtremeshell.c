@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #define MAX_INPUT_LENGTH 100
 #define MAX_ARGS 100
@@ -17,9 +18,10 @@ int main(int argc, char *argv[])
    const char* path = getenv("PATH");
    char new_path[1024];
    snprintf(new_path, sizeof(new_path), "PATH=%s", path);
-   putenv(new_path);
+   putenv(new_path);   
+   bool running = true;
    
-   while (1) {
+   while (running) {
        printf("\033[32m&xtremeshell$ -> ");
        fgets(input, sizeof(input), stdin);
        input[strcspn(input, "\n")] = '\0'; 
