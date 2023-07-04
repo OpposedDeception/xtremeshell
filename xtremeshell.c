@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
    char *args[MAX_ARGS];
    
    while (1) {
-       printf("&xtremeshell$ -> ");
+       printf("\033[32m&xtremeshell$ -> ");
        fgets(input, sizeof(input), stdin);
        input[strcspn(input, "\n")] = '\0'; 
        
