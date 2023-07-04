@@ -14,6 +14,11 @@ int main(int argc, char *argv[])
    char input[MAX_INPUT_LENGTH];
    char *args[MAX_ARGS];
    
+   const char* path = getenv("PATH");
+   char new_path[1024];
+   snprintf(new_path, sizeof(new_path), "PATH=%s", path);
+   putenv(new_path);
+   
    while (1) {
        printf("\033[32m&xtremeshell$ -> ");
        fgets(input, sizeof(input), stdin);
