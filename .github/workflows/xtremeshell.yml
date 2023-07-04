@@ -1,0 +1,23 @@
+name: XtremeShell Configuration
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: [self-hosted, popos]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Configure
+      run: ./configure
+    - name: Build
+      run: make
+    - name: Run Tests
+      run: make check
+    - name: Run Distcheck
+      run: make distcheck      
