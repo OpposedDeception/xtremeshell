@@ -63,7 +63,7 @@ static inline int execute_commands(char* args[]) {
     
     if (strcmp(args[0], "wget") == 0 && args[1] != NULL) {
         char cmd[100];
-        sprintf(cmd, sizeof(cmd), "wget %s", args[1]);
+        snprintf(cmd, sizeof(cmd), "wget %s", args[1]);
         system(cmd);
     }
     
@@ -78,8 +78,8 @@ static inline int execute_commands(char* args[]) {
             if (command == NULL) {
                 perror("malloc");
                 return -1;
-            }
-            sprintf(command, "/%s", args[0]);
+            }            
+            snprintf(command, strlen(args[0]) + 2, "/%s", args[0]);
             execl("/bin/sh", "sh", "-c", command, NULL);
             perror("execl");
             free(command);
@@ -88,6 +88,10 @@ static inline int execute_commands(char* args[]) {
         execvp(args[0], args);
         perror("execvp");
         return 1;
+    } else {
+        int status;
+        waitpid(pid, &status, 0);
+        return 0;
     }
     return 0;
 }
