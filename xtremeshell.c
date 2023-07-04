@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 #define MAX_INPUT_LENGTH 100
-#define MAX_ARGS 10
+#define MAX_ARGS 100
 #define DELIMITER " "
 
 static inline int execute_commands(char* args[]);
@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
    char *args[MAX_ARGS];
    
    while (1) {
-       printf("&xtremeshell& -> ");
+       printf("&xtremeshell$ -> ");
        fgets(input, sizeof(input), stdin);
        input[strcspn(input, "\n")] = '\0'; 
        
@@ -47,6 +47,17 @@ static inline int execute_commands(char* args[]) {
             return -1;
         }
         return 0;
+    }
+    
+    if (strcmp(args[0], "uname") == 0 && strcmp(args[1], "-a") == 0) {
+        system("uname -a");
+        return 0;
+    }
+    
+    if (strcmp(args[0], "wget") == 0 && args[1] != NULL) {
+        char cmd[100];
+        sprintf(cmd, sizeof(cmd), "wget %s", args[1]);
+        system(cmd);
     }
     
     pid_t pid = fork();
