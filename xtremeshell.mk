@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra
 LDFLAGS = -lm
 
-SRC = main.c cmdexecution.c
+SRC = xtremeshell.c
 OBJ = $(SRC:.c=.o)
 EXECUTABLE = xtremeshell
 
